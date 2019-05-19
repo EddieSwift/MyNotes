@@ -12,6 +12,9 @@
 
 @interface NotesTableViewController ()
 
+@property (strong, nonatomic) NSMutableArray *filteredNotes;
+@property (assign, nonatomic) BOOL isFiltered;
+
 @end
 
 @implementation NotesTableViewController
@@ -122,6 +125,50 @@
         NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
         noteDetailViewController.noteForShow = self.notesArray[selectedIndexPath.row];
     }
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    
+    [searchBar resignFirstResponder];
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    
+    if (searchText.length == 0) {
+        
+        self.isFiltered = false;
+        
+        [self.searchBar endEditing:YES];
+        
+    } else {
+        
+        self.isFiltered = true;
+        
+        self.filteredNotes = [[NSMutableArray alloc] init];
+        
+        for (Note *note in self.notesArray) {
+            
+            NSRange range = [note.content rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            
+            if (range.location != NSNotFound) {
+                
+                [self.filteredNotes addObject:note];
+                
+            }
+        }
+    }
+    
+    [self.tableView reloadData];
+    
+    NSLog(@"textDidChange: %@", searchText);
 }
 
 @end

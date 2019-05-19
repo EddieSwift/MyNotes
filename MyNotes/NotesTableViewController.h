@@ -12,9 +12,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NotesTableViewController : UITableViewController
+@interface NotesTableViewController : UITableViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSMutableArray *notesArray;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
 
 @end
 
