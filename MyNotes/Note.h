@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Note : NSObject
 
 @property (strong, nonatomic) NSString *content;
+@property (strong, nonatomic) NSDate *noteDate;
 
 @end
 

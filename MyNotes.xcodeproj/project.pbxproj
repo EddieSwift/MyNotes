@@ -16,6 +16,7 @@
 		2C66EDA92291675B0052D9A6 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C66EDA82291675B0052D9A6 /* DetailsViewController.m */; };
 		2C66EDAB229167BA0052D9A6 /* MyLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C66EDAA229167BA0052D9A6 /* MyLaunchScreen.storyboard */; };
 		2C66EDAE229168040052D9A6 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C66EDAD229168040052D9A6 /* Note.m */; };
+		2C66EDB222919F370052D9A6 /* NoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C66EDB122919F370052D9A6 /* NoteTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,8 @@
 		2C66EDAA229167BA0052D9A6 /* MyLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MyLaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C66EDAC229168040052D9A6 /* Note.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
 		2C66EDAD229168040052D9A6 /* Note.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
+		2C66EDB022919F370052D9A6 /* NoteTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoteTableViewCell.h; sourceTree = "<group>"; };
+		2C66EDB122919F370052D9A6 /* NoteTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,7 @@
 		2C66ED8A229166D90052D9A6 /* MyNotes */ = {
 			isa = PBXGroup;
 			children = (
+				2C66EDAF22919F160052D9A6 /* Cell */,
 				2C66EDA4229167030052D9A6 /* NotesTableViewController.h */,
 				2C66EDA5229167030052D9A6 /* NotesTableViewController.m */,
 				2C66EDAC229168040052D9A6 /* Note.h */,
@@ -82,6 +86,15 @@
 				2C66EDAA229167BA0052D9A6 /* MyLaunchScreen.storyboard */,
 			);
 			path = MyNotes;
+			sourceTree = "<group>";
+		};
+		2C66EDAF22919F160052D9A6 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				2C66EDB022919F370052D9A6 /* NoteTableViewCell.h */,
+				2C66EDB122919F370052D9A6 /* NoteTableViewCell.m */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,6 +169,7 @@
 			files = (
 				2C66ED8D229166D90052D9A6 /* AppDelegate.m in Sources */,
 				2C66EDA92291675B0052D9A6 /* DetailsViewController.m in Sources */,
+				2C66EDB222919F370052D9A6 /* NoteTableViewCell.m in Sources */,
 				2C66EDA6229167030052D9A6 /* NotesTableViewController.m in Sources */,
 				2C66EDAE229168040052D9A6 /* Note.m in Sources */,
 				2C66ED9E229166DB0052D9A6 /* main.m in Sources */,

@@ -20,14 +20,16 @@
     [super viewDidLoad];
     
     [self.noteTextView becomeFirstResponder];
-    // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
     
-    self.noteTextView.text = self.noteForShow.content;
+    if (self.noteForShow) {
+        
+        self.noteTextView.text = self.noteForShow.content;
+    }
 }
 
 /*
@@ -46,9 +48,13 @@
     
     Note *note = [[Note alloc] init];
     note.content = self.noteTextView.text;
+    note.noteDate = [NSDate date];
+    
     [self.notesViewController.notesArray addObject:note];
     
     [self.noteTextView resignFirstResponder];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

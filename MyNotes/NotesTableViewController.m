@@ -8,6 +8,7 @@
 
 #import "NotesTableViewController.h"
 #import "DetailsViewController.h"
+#import "NoteTableViewCell.h"
 
 @interface NotesTableViewController ()
 
@@ -49,11 +50,11 @@
     
     static NSString *identifier = @"cell";
 
-    UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:@"cell"];
+    NoteTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     if (!cell) {
         
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[NoteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
     Note *note = [self.notesArray objectAtIndex:indexPath.row];
@@ -66,15 +67,43 @@
         showNoteContent = [showNoteContent substringToIndex:100];
     }
     
-    cell.textLabel.text = showNoteContent;
+    cell.contentLabel.text = showNoteContent;
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd.MM.yy"];
+    cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
+    
+    [dateFormatter setDateFormat:@"hh:mm"];
+    cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
     
     return cell;
+}
+
+// Deleting notes
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [self.notesArray removeObjectAtIndex:indexPath.row];
+    
+    [tableView beginUpdates];
+    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [tableView endUpdates];
+}
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
  
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return 80.0;
 }
 
 #pragma mark - Segue Navigation
