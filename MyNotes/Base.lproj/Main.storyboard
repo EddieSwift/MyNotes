@@ -18,10 +18,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" showsCancelButton="YES" id="sNN-68-PCb">
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="sNN-68-PCb">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="wAO-Nv-PnC" id="tO2-BU-GnW"/>
+                            </connections>
                         </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cell" rowHeight="80" id="upK-i4-Yxe" customClass="NoteTableViewCell">
@@ -111,14 +114,22 @@
                         <viewLayoutGuide key="safeArea" id="b1N-7C-gQR"/>
                     </view>
                     <navigationItem key="navigationItem" id="v35-YG-Tqu">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="k8G-fd-L7R">
-                            <connections>
-                                <action selector="doneBarButtonAction:" destination="nic-00-PjK" id="esu-kb-xIN"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="save" id="k8G-fd-L7R">
+                                <connections>
+                                    <action selector="doneBarButtonAction:" destination="nic-00-PjK" id="esu-kb-xIN"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="action" id="mcA-Vr-3gm">
+                                <connections>
+                                    <action selector="shareBarButtonAction:" destination="nic-00-PjK" id="OXu-fo-bZH"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="noteTextView" destination="bNp-vj-891" id="taO-sJ-FJv"/>
+                        <outlet property="shareBarButtonItem" destination="mcA-Vr-3gm" id="H2S-KO-Ar9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wkm-eM-7EW" userLabel="First Responder" sceneMemberID="firstResponder"/>

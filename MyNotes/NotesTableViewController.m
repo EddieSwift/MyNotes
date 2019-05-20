@@ -25,34 +25,35 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.searchBar.delegate = self;
     
     self.notesArray = [NSMutableArray array];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-
+    
     NSLog(@"self.notesArray count: %ld", [self.notesArray count]);
- 
+    
     [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
+    
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return [self.notesArray count];
+    
+    return !self.isFiltered ?  [self.notesArray count] : [self.filteredNotes count];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *identifier = @"cell";
-
+    
     NoteTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     if (!cell) {
@@ -60,24 +61,43 @@
         cell = [[NoteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
-    Note *note = [self.notesArray objectAtIndex:indexPath.row];
-    
-    NSString *showNoteContent = note.content;
-    
-    // Output max length of note
-    if ([showNoteContent length] > 100) {
-        
-        showNoteContent = [showNoteContent substringToIndex:100];
-    }
-    
-    cell.contentLabel.text = showNoteContent;
-    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"dd.MM.yy"];
-    cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
+    NSString *showNoteContent = [[NSString alloc] init];
     
-    [dateFormatter setDateFormat:@"hh:mm"];
-    cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
+    if (!self.isFiltered) {
+        
+        Note *note = [self.notesArray objectAtIndex:indexPath.row];
+        
+        showNoteContent = note.content;
+        
+        // Output max length of note
+        showNoteContent = [self substringNote:showNoteContent];
+        
+        cell.contentLabel.text = showNoteContent;
+        
+        [dateFormatter setDateFormat:@"dd.MM.yy"];
+        cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
+        
+        [dateFormatter setDateFormat:@"hh:mm"];
+        cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
+        
+    } else {
+        
+        Note *note = [self.filteredNotes objectAtIndex:indexPath.row];
+        
+        showNoteContent = note.content;
+        
+        // Output max length of note
+        showNoteContent = [self substringNote:showNoteContent];
+        
+        cell.contentLabel.text = showNoteContent;
+        
+        [dateFormatter setDateFormat:@"dd.MM.yy"];
+        cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
+        
+        [dateFormatter setDateFormat:@"hh:mm"];
+        cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
+    }
     
     return cell;
 }
@@ -94,15 +114,24 @@
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-
+    
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark - Help Methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
+// Output max length of note
+- (NSString*) substringNote:(NSString*) noteContent {
+    
+    if ([noteContent length] > 100) {
+        
+        return [noteContent substringToIndex:100];
+    }
+    
+    return noteContent;
 }
+
+#pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -112,14 +141,13 @@
 #pragma mark - Segue Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
+    
     if ([segue.identifier isEqualToString:@"addNewNoteSegue"]) {
         
         DetailsViewController *detailViewController = (DetailsViewController*)segue.destinationViewController;
         detailViewController.notesViewController = self;
-    }
-    
-    if ([segue.identifier isEqualToString:@"selectNoteSeque"]) {
+        
+    } else if ([segue.identifier isEqualToString:@"selectNoteSeque"]) {
         
         DetailsViewController *noteDetailViewController = [segue destinationViewController];
         NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
@@ -137,7 +165,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     
     [searchBar resignFirstResponder];
-    [searchBar setShowsCancelButton:YES animated:YES];
+    [searchBar setShowsCancelButton:NO animated:YES];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -161,14 +189,11 @@
             if (range.location != NSNotFound) {
                 
                 [self.filteredNotes addObject:note];
-                
             }
         }
     }
     
     [self.tableView reloadData];
-    
-    NSLog(@"textDidChange: %@", searchText);
 }
 
 @end

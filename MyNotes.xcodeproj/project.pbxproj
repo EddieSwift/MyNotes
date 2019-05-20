@@ -69,15 +69,14 @@
 		2C66ED8A229166D90052D9A6 /* MyNotes */ = {
 			isa = PBXGroup;
 			children = (
-				2C66EDAF22919F160052D9A6 /* Cell */,
+				2C66EDC5229319080052D9A6 /* Models */,
 				2C66EDA4229167030052D9A6 /* NotesTableViewController.h */,
 				2C66EDA5229167030052D9A6 /* NotesTableViewController.m */,
-				2C66EDAC229168040052D9A6 /* Note.h */,
-				2C66EDAD229168040052D9A6 /* Note.m */,
 				2C66EDA72291675B0052D9A6 /* DetailsViewController.h */,
 				2C66EDA82291675B0052D9A6 /* DetailsViewController.m */,
 				2C66ED8B229166D90052D9A6 /* AppDelegate.h */,
 				2C66ED8C229166D90052D9A6 /* AppDelegate.m */,
+				2C66EDAF22919F160052D9A6 /* Cell */,
 				2C66ED91229166D90052D9A6 /* Main.storyboard */,
 				2C66ED97229166DB0052D9A6 /* Assets.xcassets */,
 				2C66ED9C229166DB0052D9A6 /* Info.plist */,
@@ -95,6 +94,15 @@
 				2C66EDB122919F370052D9A6 /* NoteTableViewCell.m */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		2C66EDC5229319080052D9A6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2C66EDAC229168040052D9A6 /* Note.h */,
+				2C66EDAD229168040052D9A6 /* Note.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

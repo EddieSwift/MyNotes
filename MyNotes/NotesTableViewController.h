@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSMutableArray *notesArray;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
-
 @end
 
 NS_ASSUME_NONNULL_END

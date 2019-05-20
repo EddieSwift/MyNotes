@@ -20,6 +20,8 @@
     [super viewDidLoad];
     
     [self.noteTextView becomeFirstResponder];
+    
+    [self.shareBarButtonItem setEnabled:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -30,17 +32,14 @@
         
         self.noteTextView.text = self.noteForShow.content;
     }
+    
+    if ([self.noteForShow.content length] > 0) {
+        
+        [self.shareBarButtonItem setEnabled:YES];
+    }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+#pragma mark - Actions
 
 - (IBAction)doneBarButtonAction:(UIBarButtonItem *)sender {
     
@@ -55,6 +54,18 @@
     [self.noteTextView resignFirstResponder];
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+// Share a note
+- (IBAction)shareBarButtonAction:(UIBarButtonItem *)sender {
+    
+    NSArray *dataToShare = @[self.noteForShow.content];
+    
+    UIActivityViewController* activityViewController = [[UIActivityViewController alloc] initWithActivityItems:dataToShare applicationActivities:nil];
+    
+    activityViewController.excludedActivityTypes = @[UIActivityTypeAirDrop];
+    
+    [self presentViewController:activityViewController animated:YES completion:^{}];
 }
 
 @end
