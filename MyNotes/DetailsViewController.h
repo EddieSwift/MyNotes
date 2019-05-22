@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Note.h"
+#import "Note+CoreDataClass.h"
+#import "DataManager.h"
 
 @class NotesTableViewController;
 
@@ -17,8 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) NotesTableViewController *notesViewController;
 @property (strong, nonatomic) Note *noteForShow;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *doneBarButtonItem;
 @property (weak, nonatomic) IBOutlet UITextView *noteTextView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *shareBarButtonItem;
+
+@property (strong,nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong,nonatomic) NSString *currentNoteID;
+
 
 - (IBAction)doneBarButtonAction:(UIBarButtonItem *)sender;
 - (IBAction)shareBarButtonAction:(UIBarButtonItem *)sender;

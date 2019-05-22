@@ -11,6 +11,8 @@
 
 @interface DetailsViewController ()
 
+@property (assign, nonatomic) BOOL isNoteChosen;
+
 @end
 
 @implementation DetailsViewController
@@ -31,6 +33,7 @@
     if (self.noteForShow) {
         
         self.noteTextView.text = self.noteForShow.content;
+        self.isNoteChosen = YES;
     }
     
     if ([self.noteForShow.content length] > 0) {
@@ -43,17 +46,55 @@
 
 - (IBAction)doneBarButtonAction:(UIBarButtonItem *)sender {
     
-    NSLog(@"doneBarButtonAction: %@", self.noteTextView.text);
     
-    Note *note = [[Note alloc] init];
-    note.content = self.noteTextView.text;
-    note.noteDate = [NSDate date];
-    
-    [self.notesViewController.notesArray addObject:note];
+    if (!self.isNoteChosen) {
+        
+        if ([self.noteTextView.text length] > 0) {
+            
+            NSError *error = nil;
+            Note *note = [Note noteWithContent:self.noteTextView.text inManagedObjectContext:self.managedObjectContext];
+            [note.managedObjectContext save:nil];
+            
+            if (![self.managedObjectContext save:&error]) {
+                NSLog(@"%@", [error localizedDescription]);
+            }
+            
+            NSFetchRequest *request = [[NSFetchRequest alloc] init];
+            
+            NSEntityDescription *description = [NSEntityDescription entityForName:@"Note" inManagedObjectContext:self.managedObjectContext];
+            
+            [request setEntity:description];
+            
+            NSError *requestError = nil;
+            
+            if (requestError) {
+                NSLog(@"ERROR: %@", [requestError localizedDescription]);
+            }
+            
+            self.currentNoteID = note.noteID;
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
+    } else {
+        
+        [self changeNote];
+    }
     
     [self.noteTextView resignFirstResponder];
+}
+
+- (void)changeNote {
     
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self.noteTextView.text length] > 0) {
+        
+        self.noteForShow.content = self.noteTextView.text;
+        self.noteForShow.noteDate = [NSDate date];
+        
+        [self.noteForShow.managedObjectContext save:nil];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 // Share a note
@@ -66,6 +107,21 @@
     activityViewController.excludedActivityTypes = @[UIActivityTypeAirDrop];
     
     [self presentViewController:activityViewController animated:YES completion:^{}];
+}
+
+#pragma mark - Core Data
+
+- (NSManagedObjectContext *)managedObjectContext {
+    
+    if (!_managedObjectContext) {
+        _managedObjectContext = [[[DataManager sharedManager] persistentContainer] viewContext];
+    }
+    
+    return _managedObjectContext;
+}
+
+- (NSFetchedResultsController*)fetchedResultsController {
+    return nil;
 }
 
 @end

@@ -8,14 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "Note.h"
+#import "Note+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NotesTableViewController : UITableViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface NotesTableViewController : UITableViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+
+@property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (strong, nonatomic) NSMutableArray *notesArray;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

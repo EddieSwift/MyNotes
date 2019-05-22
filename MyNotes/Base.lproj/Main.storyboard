@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="a10-ah-szD">
-    <device id="retina6_1" orientation="portrait">
+    <device id="retina6_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -31,7 +31,7 @@
                                 <rect key="frame" x="0.0" y="72" width="414" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="upK-i4-Yxe" id="jkG-sI-1Ww">
-                                    <rect key="frame" x="0.0" y="0.0" width="376" height="79.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="376" height="79.666666666666671"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HrO-kH-HWC">
@@ -70,7 +70,6 @@
                                     <outlet property="contentLabel" destination="J08-pr-pD9" id="5qp-GQ-3zQ"/>
                                     <outlet property="dateLabel" destination="HrO-kH-HWC" id="fYU-IN-3CW"/>
                                     <outlet property="timeLabel" destination="4P9-n9-wam" id="hJk-hD-Rjd"/>
-                                    <segue destination="nic-00-PjK" kind="show" identifier="selectNoteSeque" id="ldF-ce-W8Y"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -97,20 +96,25 @@
         <!--Details View Controller-->
         <scene sceneID="887-jG-9SG">
             <objects>
-                <viewController id="nic-00-PjK" customClass="DetailsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="detailsNote" id="nic-00-PjK" customClass="DetailsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BpA-4f-js0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bNp-vj-891">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bNp-vj-891">
                                 <rect key="frame" x="20" y="108" width="374" height="754"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="b1N-7C-gQR" firstAttribute="trailing" secondItem="bNp-vj-891" secondAttribute="trailing" constant="20" id="Qnc-6V-4GQ"/>
+                            <constraint firstItem="bNp-vj-891" firstAttribute="bottom" secondItem="b1N-7C-gQR" secondAttribute="bottom" id="YMp-K6-Dlc"/>
+                            <constraint firstItem="bNp-vj-891" firstAttribute="top" secondItem="b1N-7C-gQR" secondAttribute="top" constant="20" id="lpQ-IR-8VJ"/>
+                            <constraint firstItem="bNp-vj-891" firstAttribute="leading" secondItem="b1N-7C-gQR" secondAttribute="leading" constant="20" id="oCY-Xg-7Zo"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="b1N-7C-gQR"/>
                     </view>
                     <navigationItem key="navigationItem" id="v35-YG-Tqu">
@@ -128,6 +132,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="doneBarButtonItem" destination="k8G-fd-L7R" id="4kr-dA-h5u"/>
                         <outlet property="noteTextView" destination="bNp-vj-891" id="taO-sJ-FJv"/>
                         <outlet property="shareBarButtonItem" destination="mcA-Vr-3gm" id="H2S-KO-Ar9"/>
                     </connections>
@@ -153,7 +158,4 @@
             <point key="canvasLocation" x="-380" y="1"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="ldF-ce-W8Y"/>
-    </inferredMetricsTieBreakers>
 </document>

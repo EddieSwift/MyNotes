@@ -9,6 +9,7 @@
 #import "NotesTableViewController.h"
 #import "DetailsViewController.h"
 #import "NoteTableViewCell.h"
+#import "DataManager.h"
 
 @interface NotesTableViewController ()
 
@@ -18,6 +19,47 @@
 @end
 
 @implementation NotesTableViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
+    
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription* description =
+    [NSEntityDescription entityForName:@"Note"
+                inManagedObjectContext:self.managedObjectContext];
+    
+    [fetchRequest setEntity:description];
+    
+    // Pagination - loading per 20 notes from the database
+    [fetchRequest setFetchBatchSize:20];
+    
+    NSSortDescriptor* dateDescription =
+    [[NSSortDescriptor alloc] initWithKey:@"noteDate" ascending:NO];
+    
+    [fetchRequest setSortDescriptors:@[dateDescription]];
+    
+    NSFetchedResultsController *aFetchedResultsController =
+    [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                        managedObjectContext:self.managedObjectContext
+                                          sectionNameKeyPath:nil
+                                                   cacheName:@"Master"];
+    aFetchedResultsController.delegate = self;
+    self.fetchedResultsController = aFetchedResultsController;
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
+}
 
 - (void)viewDidLoad {
     
@@ -27,13 +69,15 @@
     self.tableView.dataSource = self;
     self.searchBar.delegate = self;
     
-    self.notesArray = [NSMutableArray array];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    NSLog(@"self.notesArray count: %ld", [self.notesArray count]);
-    
+    [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
 }
 
@@ -41,20 +85,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return 1;
+    return [[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return !self.isFiltered ?  [self.notesArray count] : [self.filteredNotes count];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    
+    return !self.isFiltered ? [sectionInfo numberOfObjects] : [self.filteredNotes count];
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *identifier = @"cell";
     
-    NoteTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:@"cell"];
+    NoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     if (!cell) {
         
@@ -66,7 +111,7 @@
     
     if (!self.isFiltered) {
         
-        Note *note = [self.notesArray objectAtIndex:indexPath.row];
+        Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         showNoteContent = note.content;
         
@@ -78,7 +123,7 @@
         [dateFormatter setDateFormat:@"dd.MM.yy"];
         cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
         
-        [dateFormatter setDateFormat:@"hh:mm"];
+        [dateFormatter setDateFormat:@"HH:mm"];
         cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
         
     } else {
@@ -95,43 +140,51 @@
         [dateFormatter setDateFormat:@"dd.MM.yy"];
         cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
         
-        [dateFormatter setDateFormat:@"hh:mm"];
+        [dateFormatter setDateFormat:@"HH:mm"];
         cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
     }
     
     return cell;
 }
 
-// Deleting notes
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [self.notesArray removeObjectAtIndex:indexPath.row];
-    
-    [tableView beginUpdates];
-    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [tableView endUpdates];
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+        
+        NSError *error = nil;
+        
+        if (![context save:&error]) {
+            
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     
+    Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    cell.textLabel.text = note.content;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
-#pragma mark - Help Methods
-
-// Output max length of note
-- (NSString*) substringNote:(NSString*) noteContent {
-    
-    if ([noteContent length] > 100) {
-        
-        return [noteContent substringToIndex:100];
-    }
-    
-    return noteContent;
-}
-
 #pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    DetailsViewController* detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailsNote"];
+    Note *passNote = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    detailViewController.noteForShow = passNote;
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -147,11 +200,6 @@
         DetailsViewController *detailViewController = (DetailsViewController*)segue.destinationViewController;
         detailViewController.notesViewController = self;
         
-    } else if ([segue.identifier isEqualToString:@"selectNoteSeque"]) {
-        
-        DetailsViewController *noteDetailViewController = [segue destinationViewController];
-        NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
-        noteDetailViewController.noteForShow = self.notesArray[selectedIndexPath.row];
     }
 }
 
@@ -168,6 +216,7 @@
     [searchBar setShowsCancelButton:NO animated:YES];
 }
 
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     
     if (searchText.length == 0) {
@@ -180,18 +229,94 @@
         
         self.isFiltered = true;
         
-        self.filteredNotes = [[NSMutableArray alloc] init];
-        
-        for (Note *note in self.notesArray) {
-            
-            NSRange range = [note.content rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            
-            if (range.location != NSNotFound) {
-                
-                [self.filteredNotes addObject:note];
-            }
-        }
+        [self filterNotes:searchText];
     }
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - Core Data
+
+- (NSManagedObjectContext *)managedObjectContext {
+    
+    if (!_managedObjectContext) {
+        _managedObjectContext = [[[DataManager sharedManager] persistentContainer] viewContext];
+    }
+    
+    return _managedObjectContext;
+}
+
+#pragma mark - Fetched results controller
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    UITableView *tableView = self.tableView;
+    
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:newIndexPath];
+            [tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    
+    [self.tableView endUpdates];
+}
+
+#pragma mark - Help Methods
+
+// Output max length of note
+- (NSString*) substringNote:(NSString*) noteContent {
+    
+    if ([noteContent length] > 100) {
+        
+        return [noteContent substringToIndex:100];
+    }
+    
+    return noteContent;
+}
+
+- (void) filterNotes:(NSString*) searchText {
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Note" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"content" ascending:YES];
+    NSArray* sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"content CONTAINS[cd] %@", searchText];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error;
+    
+    NSArray* loadedEntities = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    self.filteredNotes = [[NSMutableArray alloc] initWithArray:loadedEntities];
     
     [self.tableView reloadData];
 }
