@@ -19,6 +19,7 @@
 		2C66EDCA229413790052D9A6 /* Note+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C66EDC8229413790052D9A6 /* Note+CoreDataClass.m */; };
 		2C66EDCB229413790052D9A6 /* Note+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C66EDC9229413790052D9A6 /* Note+CoreDataProperties.m */; };
 		2C66EDD1229423B30052D9A6 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C66EDD0229423B30052D9A6 /* DataManager.m */; };
+		2CF1192E22972AF9007A8BCB /* sort.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CF1192D22972AF9007A8BCB /* sort.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		2C66EDC9229413790052D9A6 /* Note+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Note+CoreDataProperties.m"; sourceTree = "<group>"; };
 		2C66EDCF229423B30052D9A6 /* DataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		2C66EDD0229423B30052D9A6 /* DataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		2CF1192D22972AF9007A8BCB /* sort.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sort.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 		2C66ED8A229166D90052D9A6 /* MyNotes */ = {
 			isa = PBXGroup;
 			children = (
+				2CF119242296ADC7007A8BCB /* Icons */,
 				2C66EDC5229319080052D9A6 /* Models */,
 				2C66EDA4229167030052D9A6 /* NotesTableViewController.h */,
 				2C66EDA5229167030052D9A6 /* NotesTableViewController.m */,
@@ -113,6 +116,14 @@
 				2C66EDC9229413790052D9A6 /* Note+CoreDataProperties.m */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		2CF119242296ADC7007A8BCB /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				2CF1192D22972AF9007A8BCB /* sort.png */,
+			);
+			path = Icons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,6 +186,7 @@
 				2C66ED98229166DB0052D9A6 /* Assets.xcassets in Resources */,
 				2C66ED93229166D90052D9A6 /* Main.storyboard in Resources */,
 				2C66EDAB229167BA0052D9A6 /* MyLaunchScreen.storyboard in Resources */,
+				2CF1192E22972AF9007A8BCB /* sort.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

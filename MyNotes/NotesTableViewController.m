@@ -15,10 +15,12 @@
 
 @property (strong, nonatomic) NSMutableArray *filteredNotes;
 @property (assign, nonatomic) BOOL isFiltered;
+@property (strong, nonatomic) NSFetchRequest *fetchRequest;
 
 @end
 
 @implementation NotesTableViewController
+
 @synthesize fetchedResultsController = _fetchedResultsController;
 
 - (NSFetchedResultsController *)fetchedResultsController {
@@ -26,34 +28,34 @@
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
-    
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+
+    self.fetchRequest = [[NSFetchRequest alloc] init];
     
     NSEntityDescription* description =
     [NSEntityDescription entityForName:@"Note"
                 inManagedObjectContext:self.managedObjectContext];
     
-    [fetchRequest setEntity:description];
+    [self.fetchRequest setEntity:description];
     
     // Pagination - loading per 20 notes from the database
-    [fetchRequest setFetchBatchSize:20];
-    
-    NSSortDescriptor* dateDescription =
+    [self.fetchRequest setFetchBatchSize:20];
+
+    NSSortDescriptor* dateDecendingDescription =
     [[NSSortDescriptor alloc] initWithKey:@"noteDate" ascending:NO];
-    
-    [fetchRequest setSortDescriptors:@[dateDescription]];
-    
+
+    [self.fetchRequest setSortDescriptors:@[dateDecendingDescription]];
+
     NSFetchedResultsController *aFetchedResultsController =
-    [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+    [[NSFetchedResultsController alloc] initWithFetchRequest:self.fetchRequest
                                         managedObjectContext:self.managedObjectContext
                                           sectionNameKeyPath:nil
                                                    cacheName:@"Master"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
-    
+
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
-        
+
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
@@ -159,6 +161,47 @@
     }
 }
 
+- (IBAction)sortBurButtonAction:(UIBarButtonItem *)sender {
+    
+    UIAlertController *sortingAlert = [[UIAlertController alloc] init];
+
+    UIAlertAction *sortFromNewAction = [UIAlertAction actionWithTitle:@"From new to old" style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * action) {
+                         
+                                                               [self sortNotesWithDescriptor:@"noteDate" ascendingOrDescending:NO];
+ 
+                                                               [self.tableView reloadData];
+                                                           }];
+    
+    UIAlertAction *sortFromOldAction = [UIAlertAction actionWithTitle:@"From old to new" style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * action) {
+
+                                                               [self sortNotesWithDescriptor:@"noteDate" ascendingOrDescending:YES];
+
+                                                               [self.tableView reloadData];
+                                                           }];
+    
+    UIAlertAction *sortAlphabeticallyAction = [UIAlertAction actionWithTitle:@"Alphabetically" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {
+                                                                  
+                                                                  [self sortNotesWithDescriptor:@"content" ascendingOrDescending:YES];
+                                                                  
+                                                                  [self.tableView reloadData];
+                                                              }];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * action) {
+
+                                                         }];
+
+    [sortingAlert addAction:sortFromNewAction];
+    [sortingAlert addAction:sortFromOldAction];
+    [sortingAlert addAction:sortAlphabeticallyAction];
+    [sortingAlert addAction:cancelAction];
+    
+    [self presentViewController:sortingAlert animated:YES completion:nil];
+}
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     
     Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -232,13 +275,11 @@
     if (searchText.length == 0) {
         
         self.isFiltered = false;
-        
         [self.searchBar endEditing:YES];
         
     } else {
         
         self.isFiltered = true;
-        
         [self filterNotes:searchText];
     }
     
@@ -259,7 +300,6 @@
 #pragma mark - Fetched results controller
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    
     [self.tableView beginUpdates];
 }
 
@@ -290,11 +330,36 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    
     [self.tableView endUpdates];
 }
 
-#pragma mark - Help Methods
+#pragma mark - My Methods
+
+- (void) sortNotesWithDescriptor:(NSString*)withKey ascendingOrDescending:(BOOL) ascendingOrDescending {
+    
+    NSEntityDescription* description =
+    [NSEntityDescription entityForName:@"Note"
+                inManagedObjectContext:self.managedObjectContext];
+    
+    [self.fetchRequest setEntity:description];
+    
+    // Pagination - loading per 20 notes from the database
+    [self.fetchRequest setFetchBatchSize:20];
+    
+    NSSortDescriptor* dateDecendingDescription =
+    [[NSSortDescriptor alloc] initWithKey:withKey ascending:ascendingOrDescending];
+    
+    [self.fetchRequest setSortDescriptors:@[dateDecendingDescription]];
+    
+    [NSFetchedResultsController deleteCacheWithName:@"Master"];
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+}
 
 - (void) updateNote:(NSIndexPath*) indexPath {
     

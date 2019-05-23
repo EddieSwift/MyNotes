@@ -17,9 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-@property (strong, nonatomic) NSMutableArray *notesArray;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *sortBarButtonItem;
 
+- (IBAction)sortBurButtonAction:(UIBarButtonItem *)sender;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end

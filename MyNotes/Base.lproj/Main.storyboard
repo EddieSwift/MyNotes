@@ -79,14 +79,22 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Notes" id="YlO-wz-2II">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="zPO-hj-sMk">
-                            <connections>
-                                <segue destination="nic-00-PjK" kind="show" identifier="addNewNoteSegue" id="MqT-S5-dNc"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="zPO-hj-sMk">
+                                <connections>
+                                    <segue destination="nic-00-PjK" kind="show" identifier="addNewNoteSegue" id="MqT-S5-dNc"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="sort.png" id="0pn-QE-jk2">
+                                <connections>
+                                    <action selector="sortBurButtonAction:" destination="wAO-Nv-PnC" id="tG9-ew-TUF"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="sNN-68-PCb" id="mUr-pd-XtT"/>
+                        <outlet property="sortBarButtonItem" destination="0pn-QE-jk2" id="val-St-Nm5"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bVm-XW-3KZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -102,9 +110,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bNp-vj-891">
-                                <rect key="frame" x="20" y="108" width="374" height="754"/>
+                                <rect key="frame" x="20" y="98" width="374" height="764"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -112,7 +120,7 @@
                         <constraints>
                             <constraint firstItem="b1N-7C-gQR" firstAttribute="trailing" secondItem="bNp-vj-891" secondAttribute="trailing" constant="20" id="Qnc-6V-4GQ"/>
                             <constraint firstItem="bNp-vj-891" firstAttribute="bottom" secondItem="b1N-7C-gQR" secondAttribute="bottom" id="YMp-K6-Dlc"/>
-                            <constraint firstItem="bNp-vj-891" firstAttribute="top" secondItem="b1N-7C-gQR" secondAttribute="top" constant="20" id="lpQ-IR-8VJ"/>
+                            <constraint firstItem="bNp-vj-891" firstAttribute="top" secondItem="b1N-7C-gQR" secondAttribute="top" constant="10" id="lpQ-IR-8VJ"/>
                             <constraint firstItem="bNp-vj-891" firstAttribute="leading" secondItem="b1N-7C-gQR" secondAttribute="leading" constant="20" id="oCY-Xg-7Zo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="b1N-7C-gQR"/>
@@ -139,7 +147,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wkm-eM-7EW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1457.9710144927537" y="0.6696428571428571"/>
+            <point key="canvasLocation" x="1457.9710144927537" y="0.0"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ftl-IL-Vvh">
@@ -158,4 +166,7 @@
             <point key="canvasLocation" x="-380" y="1"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="sort.png" width="16" height="16"/>
+    </resources>
 </document>
