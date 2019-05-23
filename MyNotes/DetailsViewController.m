@@ -50,34 +50,10 @@
     if (!self.isNoteChosen) {
         
         if ([self.noteTextView.text length] > 0) {
-            
-            NSError *error = nil;
-            Note *note = [Note noteWithContent:self.noteTextView.text inManagedObjectContext:self.managedObjectContext];
-            [note.managedObjectContext save:nil];
-            
-            if (![self.managedObjectContext save:&error]) {
-                NSLog(@"%@", [error localizedDescription]);
-            }
-            
-            NSFetchRequest *request = [[NSFetchRequest alloc] init];
-            
-            NSEntityDescription *description = [NSEntityDescription entityForName:@"Note" inManagedObjectContext:self.managedObjectContext];
-            
-            [request setEntity:description];
-            
-            NSError *requestError = nil;
-            
-            if (requestError) {
-                NSLog(@"ERROR: %@", [requestError localizedDescription]);
-            }
-            
-            self.currentNoteID = note.noteID;
-            
-            [self.navigationController popViewControllerAnimated:YES];
+            [self createNote];
         }
         
     } else {
-        
         [self changeNote];
     }
     
@@ -88,10 +64,43 @@
     
     if ([self.noteTextView.text length] > 0) {
         
-        self.noteForShow.content = self.noteTextView.text;
-        self.noteForShow.noteDate = [NSDate date];
+//        self.noteForShow.content = self.noteTextView.text;
+//        self.noteForShow.noteDate = [NSDate date];
+//        [self.noteForShow.managedObjectContext save:nil];
         
-        [self.noteForShow.managedObjectContext save:nil];
+        [self.noteForShow.managedObjectContext deleteObject:self.noteForShow];
+        
+        [self createNote];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void) createNote {
+    
+    if ([self.noteTextView.text length] > 0) {
+        
+        NSError *error = nil;
+        Note *note = [Note noteWithContent:self.noteTextView.text inManagedObjectContext:self.managedObjectContext];
+        [note.managedObjectContext save:nil];
+        
+        if (![self.managedObjectContext save:&error]) {
+            NSLog(@"%@", [error localizedDescription]);
+        }
+        
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        
+        NSEntityDescription *description = [NSEntityDescription entityForName:@"Note" inManagedObjectContext:self.managedObjectContext];
+        
+        [request setEntity:description];
+        
+        NSError *requestError = nil;
+        
+        if (requestError) {
+            NSLog(@"ERROR: %@", [requestError localizedDescription]);
+        }
+        
+        self.currentNoteID = note.noteID;
         
         [self.navigationController popViewControllerAnimated:YES];
     }
