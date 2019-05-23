@@ -155,16 +155,7 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
-        
-        NSError *error = nil;
-        
-        if (![context save:&error]) {
-            
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
+        [self deleteNote:indexPath];
     }
 }
 
@@ -177,6 +168,25 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewRowAction *updateAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Update" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        
+        [self updateNote:indexPath];
+        
+        [self.tableView setEditing:NO];
+    }];
+    updateAction.backgroundColor = [UIColor grayColor];
+    
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        
+        [self deleteNote:indexPath];
+    }];
+    
+    return @[deleteAction, updateAction];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -285,6 +295,30 @@
 }
 
 #pragma mark - Help Methods
+
+- (void) updateNote:(NSIndexPath*) indexPath {
+    
+    DetailsViewController* detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailsNote"];
+    
+    Note *passNote = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    detailViewController.noteForShow = passNote;
+    
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
+- (void) deleteNote:(NSIndexPath*) indexPath {
+    
+    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+    [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+    
+    NSError *error = nil;
+    
+    if (![context save:&error]) {
+        
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+}
 
 // Output max length of note
 - (NSString*) substringNote:(NSString*) noteContent {
