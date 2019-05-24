@@ -165,7 +165,7 @@
     
     UIAlertController *sortingAlert = [[UIAlertController alloc] init];
 
-    UIAlertAction *sortFromNewAction = [UIAlertAction actionWithTitle:@"From new to old" style:UIAlertActionStyleDefault
+    UIAlertAction *sortFromNewAction = [UIAlertAction actionWithTitle:@"From New To Old" style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * action) {
                          
                                                                [self sortNotesWithDescriptor:@"noteDate" ascendingOrDescending:NO];
@@ -173,7 +173,7 @@
                                                                [self.tableView reloadData];
                                                            }];
     
-    UIAlertAction *sortFromOldAction = [UIAlertAction actionWithTitle:@"From old to new" style:UIAlertActionStyleDefault
+    UIAlertAction *sortFromOldAction = [UIAlertAction actionWithTitle:@"From Old To New" style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * action) {
 
                                                                [self sortNotesWithDescriptor:@"noteDate" ascendingOrDescending:YES];

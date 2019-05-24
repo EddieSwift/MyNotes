@@ -77,7 +77,6 @@
 		2C66ED8A229166D90052D9A6 /* MyNotes */ = {
 			isa = PBXGroup;
 			children = (
-				2CF119242296ADC7007A8BCB /* Icons */,
 				2C66EDC5229319080052D9A6 /* Models */,
 				2C66EDA4229167030052D9A6 /* NotesTableViewController.h */,
 				2C66EDA5229167030052D9A6 /* NotesTableViewController.m */,
@@ -89,6 +88,7 @@
 				2C66ED8C229166D90052D9A6 /* AppDelegate.m */,
 				2C66EDAF22919F160052D9A6 /* Cell */,
 				2C66ED91229166D90052D9A6 /* Main.storyboard */,
+				2CF119242296ADC7007A8BCB /* Icons */,
 				2C66ED97229166DB0052D9A6 /* Assets.xcassets */,
 				2C66ED9C229166DB0052D9A6 /* Info.plist */,
 				2C66ED9D229166DB0052D9A6 /* main.m */,

@@ -69,7 +69,6 @@
 //        [self.noteForShow.managedObjectContext save:nil];
         
         [self.noteForShow.managedObjectContext deleteObject:self.noteForShow];
-        
         [self createNote];
         
         [self.navigationController popViewControllerAnimated:YES];
