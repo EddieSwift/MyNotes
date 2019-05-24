@@ -233,10 +233,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    DetailsViewController* detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailsNote"];
-    Note *passNote = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    detailViewController.noteForShow = passNote;
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    if (self.isFiltered) {
+        
+        Note *passNote = [self.filteredNotes objectAtIndex:indexPath.row];
+        
+        DetailsViewController* detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailsNote"];
+        detailViewController.noteForShow = passNote;
+        [self.navigationController pushViewController:detailViewController animated:YES];
+        
+    } else {
+        
+        Note *passNote = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        DetailsViewController* detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailsNote"];
+        detailViewController.noteForShow = passNote;
+        [self.navigationController pushViewController:detailViewController animated:YES];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
