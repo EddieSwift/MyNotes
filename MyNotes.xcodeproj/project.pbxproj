@@ -86,14 +86,13 @@
 				2C66EDD0229423B30052D9A6 /* DataManager.m */,
 				2C66ED8B229166D90052D9A6 /* AppDelegate.h */,
 				2C66ED8C229166D90052D9A6 /* AppDelegate.m */,
+				2C6C01DD2298310600523C41 /* Storyboards */,
 				2C66EDAF22919F160052D9A6 /* Cell */,
-				2C66ED91229166D90052D9A6 /* Main.storyboard */,
 				2CF119242296ADC7007A8BCB /* Icons */,
 				2C66ED97229166DB0052D9A6 /* Assets.xcassets */,
 				2C66ED9C229166DB0052D9A6 /* Info.plist */,
 				2C66ED9D229166DB0052D9A6 /* main.m */,
 				2C66ED94229166D90052D9A6 /* MyNotes.xcdatamodeld */,
-				2C66EDAA229167BA0052D9A6 /* MyLaunchScreen.storyboard */,
 			);
 			path = MyNotes;
 			sourceTree = "<group>";
@@ -116,6 +115,15 @@
 				2C66EDC9229413790052D9A6 /* Note+CoreDataProperties.m */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		2C6C01DD2298310600523C41 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				2C66ED91229166D90052D9A6 /* Main.storyboard */,
+				2C66EDAA229167BA0052D9A6 /* MyLaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 		2CF119242296ADC7007A8BCB /* Icons */ = {
