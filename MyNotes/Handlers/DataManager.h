@@ -21,7 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (DataManager*) sharedManager;
 
 - (void)saveContext;
-//- (NSArray*) getAllObjects;
 
 @end
 
