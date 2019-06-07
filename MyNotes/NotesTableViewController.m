@@ -74,11 +74,6 @@
     [self.tableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [self.tableView reloadData];
-}
-
 - (void)viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
 }
@@ -89,6 +84,7 @@
     
     return [[self.fetchedResultsController sections] count];
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -101,15 +97,11 @@
     
     static NSString *identifier = @"cell";
     
-    NoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (!cell) {
-        
-        cell = [[NoteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    }
+    // newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered
+    NoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSString *showNoteContent = [[NSString alloc] init];
+    NSString *showNoteContent = [[NSString alloc] init]; 
     
     if (!self.isFiltered) {
         

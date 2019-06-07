@@ -21,6 +21,8 @@
     return manager;
 }
 
+
+
 - (NSArray*) getAllObjects {
     
     NSFetchRequest* request = [[NSFetchRequest alloc] init];

@@ -68,6 +68,11 @@
 //        self.noteForShow.noteDate = [NSDate date];
 //        [self.noteForShow.managedObjectContext save:nil];
         
+//        [self.noteForShow setValue:self.noteTextView.text forKey:@"content"];
+//        [self.noteForShow setValue:[NSDate date] forKey:@"noteDate"];
+//        [self.noteForShow.managedObjectContext save:nil];
+        
+        
         [self.noteForShow.managedObjectContext deleteObject:self.noteForShow];
         [self createNote];
         
