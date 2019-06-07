@@ -13,31 +13,13 @@
 + (DataManager*) sharedManager {
     
     static DataManager* manager = nil;
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[DataManager alloc] init];
     });
     
     return manager;
-}
-
-
-
-- (NSArray*) getAllObjects {
-    
-    NSFetchRequest* request = [[NSFetchRequest alloc] init];
-    NSEntityDescription* description = [NSEntityDescription entityForName:@"Note" inManagedObjectContext:self.persistentContainer.viewContext];
-    [request setEntity:description];
-    
-    NSError* reqestError = nil;
-    NSArray* resultArray = [self.persistentContainer.viewContext executeFetchRequest:request error:&reqestError];
-    
-    if (reqestError) {
-        
-        NSLog(@"%@", [reqestError localizedDescription]);
-    }
-    
-    return resultArray;
 }
 
 #pragma mark - Core Data stack

@@ -11,14 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DataManager : NSObject
+@interface DataManager : NSObject <NSFetchedResultsControllerDelegate>
 
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
+@property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSFetchRequest *fetchRequest;
 
 + (DataManager*) sharedManager;
 
 - (void)saveContext;
-- (NSArray*) getAllObjects;
+//- (NSArray*) getAllObjects;
 
 @end
 

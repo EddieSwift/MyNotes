@@ -7,14 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Note+CoreDataClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NoteTableViewCell : UITableViewCell
 
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+@property (strong, nonatomic) NSString *showNoteContent;
+
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+
+- (void) cofigureNote:(Note*) note;
 
 @end
 

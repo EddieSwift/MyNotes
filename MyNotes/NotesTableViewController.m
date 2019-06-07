@@ -100,42 +100,17 @@
     // newer dequeue method guarantees a cell is returned and resized properly, assuming identifier is registered
     NoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSString *showNoteContent = [[NSString alloc] init]; 
-    
     if (!self.isFiltered) {
         
         Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
-        showNoteContent = note.content;
-        
-        // Output max length of note
-        showNoteContent = [self substringNote:showNoteContent];
-        
-        cell.contentLabel.text = showNoteContent;
-        
-        [dateFormatter setDateFormat:@"dd.MM.yy"];
-        cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
-        
-        [dateFormatter setDateFormat:@"HH:mm"];
-        cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
+        [cell cofigureNote:note];
         
     } else {
         
         Note *note = [self.filteredNotes objectAtIndex:indexPath.row];
         
-        showNoteContent = note.content;
-        
-        // Output max length of note
-        showNoteContent = [self substringNote:showNoteContent];
-        
-        cell.contentLabel.text = showNoteContent;
-        
-        [dateFormatter setDateFormat:@"dd.MM.yy"];
-        cell.dateLabel.text = [dateFormatter stringFromDate:note.noteDate];
-        
-        [dateFormatter setDateFormat:@"HH:mm"];
-        cell.timeLabel.text = [dateFormatter stringFromDate:note.noteDate];
+        [cell cofigureNote:note];
     }
     
     return cell;
@@ -389,17 +364,6 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-}
-
-// Output max length of note
-- (NSString*) substringNote:(NSString*) noteContent {
-    
-    if ([noteContent length] > 100) {
-        
-        return [noteContent substringToIndex:100];
-    }
-    
-    return noteContent;
 }
 
 - (void) filterNotes:(NSString*) searchText {
